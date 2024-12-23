@@ -3,7 +3,7 @@ declare global {
   interface Window {
     electronAPI: {
 
-
+      key: () => Promise<any>; // 假设返回类型为 `Promise<any>`，具体类型可以根据实际需求调整
       getCaptchaSettings: () => Promise<any>;
     };
 
