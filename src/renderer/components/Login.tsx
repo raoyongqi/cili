@@ -1,8 +1,23 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Button, Input, message, Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
+import './Login.less'; // 引入 LESS 样式
 
 const Login: React.FC = () => {
   const captchaSettingsRef = useRef<any>(null); // 使用 useRef 来存储 captchaSettings
   const [isLoading, setIsLoading] = useState<boolean>(false); // 用于管理是否加载中
+  const [response, setResponse] = useState<any>(null);
+
+  
+  const fetchSalt= async () => {
+    try {
+      const data = await window.electronAPI.key(); // 调用主进程的 fetchData 函数
+      setResponse(data); // 设置响应数据
+      console.log(data); // 打印响应数据到控制台
+    } catch (error) {
+      console.error('Error fetching data:', error); // 错误处理
+    }
+  };
 
   // 获取验证码结果
   const getCaptchaResult = async (): Promise<any> => {
@@ -67,15 +82,45 @@ const Login: React.FC = () => {
       console.error('Captcha verification failed:', error);
     }
   };
-
   return (
-    <div>
-      <h1>Login Page</h1>
-      <button onClick={handleCaptchaVerification} disabled={isLoading}>
-        {isLoading ? 'Loading...' : 'Verify Captcha'}
-      </button>
+    <div className="login-container">
+      <h1 className="login-title">Login Page</h1>
+      
+      
+      <div className="form-item">
+        <Input placeholder="Username" className="login-input" />
+      </div>
+      
+      
+      <div className="form-item">
+        <Input.Password placeholder="Password" className="login-input" />
+      </div>
+
+      
+      <div className="form-item">
+        <Button
+          className="login-button"
+          onClick={fetchSalt}
+        >
+          获取盐
+        </Button>
+      </div>
+
+
+
+      <div className="form-item">
+        <Button
+          className={`login-button ${isLoading ? 'loading' : ''}`}
+          onClick={handleCaptchaVerification}
+          disabled={isLoading}
+        >
+          {isLoading ? <Spin indicator={<LoadingOutlined spin />} /> : 'Verify Captcha'}
+        </Button>
+      </div>
     </div>
   );
 };
+
+
 
 export default Login;

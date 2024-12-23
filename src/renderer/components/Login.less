@@ -1,0 +1,81 @@
+// Login.less
+
+@primary-color: #4CAF50;
+@secondary-color: #ffa500;
+@font-family: 'Arial', sans-serif;
+@background-color: #f0f0f0;
+@container-bg-color: #ffffff;
+@container-box-shadow: 0 0 0px rgba(0, 0, 0, 0.1);
+@button-radius: 6px;
+@input-padding: 10px 20px;
+@button-padding: 12px 24px;
+
+html, body {
+  height: 100%; // 确保 body 和 html 占满整个视口
+  margin: 0;
+  padding: 0;
+  font-family: @font-family;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: @background-color; // 背景色
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+  background-color: @container-bg-color;
+  box-shadow: @container-box-shadow;
+  border-radius: 8px;
+  box-sizing: border-box;
+  margin: 20px;
+}
+
+.login-title {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.form-item {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.login-input {
+  padding: @input-padding;
+  width: 100%;
+  border-radius: @button-radius;
+  box-sizing: border-box;
+}
+
+.login-button {
+  background-color: @primary-color;
+  color: white;
+  font-size: 1rem;
+  padding: @button-padding;
+  border: none;
+  border-radius: @button-radius;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  max-width: 300px;
+
+  &:hover {
+    background-color: darken(@primary-color, 10%);
+  }
+
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+
+  &.loading {
+    background-color: @secondary-color;
+  }
+}
