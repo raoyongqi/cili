@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Button, Input, message, Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
-import './Login.less'; // 引入 LESS 样式
 
 const Login: React.FC = () => {
   const captchaSettingsRef = useRef<any>(null); // 使用 useRef 来存储 captchaSettings
@@ -87,17 +86,17 @@ const Login: React.FC = () => {
       <h1 className="login-title">Login Page</h1>
       
       
-      <div className="form-item">
+      <div style={{ margin: '20px 0' }}>
         <Input placeholder="Username" className="login-input" />
       </div>
       
       
-      <div className="form-item">
+      <div style={{ margin: '20px 0' }}>
         <Input.Password placeholder="Password" className="login-input" />
       </div>
 
       
-      <div className="form-item">
+      <div style={{ margin: '20px 0' }}>
         <Button
           className="login-button"
           onClick={fetchSalt}
@@ -108,7 +107,9 @@ const Login: React.FC = () => {
 
 
 
-      <div className="form-item">
+      <div style={{ margin: '20px 0' }}>
+        
+        
         <Button
           className={`login-button ${isLoading ? 'loading' : ''}`}
           onClick={handleCaptchaVerification}
@@ -116,6 +117,9 @@ const Login: React.FC = () => {
         >
           {isLoading ? <Spin indicator={<LoadingOutlined spin />} /> : 'Verify Captcha'}
         </Button>
+
+
+
       </div>
     </div>
   );
