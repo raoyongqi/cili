@@ -1,24 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const Login: React.FC = () => {
-  const [captchaSettings, setCaptchaSettings] = useState<any>(null);
+  const captchaSettingsRef = useRef<any>(null); // 使用 useRef 来存储 captchaSettings
+  const [isLoading, setIsLoading] = useState<boolean>(false); // 用于管理是否加载中
 
   // 获取验证码结果
   const getCaptchaResult = async (): Promise<any> => {
-    if (!captchaSettings) {
-      // 如果captchaSettings还没有加载，则加载它
+    if (!captchaSettingsRef.current) {
+      // 如果 captchaSettings 还没有加载，则加载它
       try {
+        setIsLoading(true); // 设置加载状态
         const settings = await window.electronAPI.getCaptchaSettings();
-        setCaptchaSettings(settings);
+        captchaSettingsRef.current = settings; // 使用 ref 更新值
       } catch (error) {
         console.error('Error loading captcha settings:', error);
         throw new Error('Captcha settings could not be loaded.');
+      } finally {
+        setIsLoading(false); // 重置加载状态
       }
     }
 
-    // 只有在captchaSettings已经加载后才继续
+    // 只有在 captchaSettings 已经加载后才继续
     return new Promise<any>((resolve, reject) => {
-      if (!captchaSettings) {
+      if (!captchaSettingsRef.current) {
         reject(new Error('Captcha settings are not loaded.'));
         return;
       }
@@ -26,7 +30,7 @@ const Login: React.FC = () => {
       // 使用设置来初始化验证码
       initGeetest(
         {
-          ...captchaSettings.data.geetest,
+          ...captchaSettingsRef.current.data.geetest,
           product: 'bind',
           https: true,
         },
@@ -36,7 +40,7 @@ const Login: React.FC = () => {
             const result = captchaObj.getValidate();
             resolve({
               ...result,
-              token: captchaSettings.data.token,
+              token: captchaSettingsRef.current.data.token,
             });
           });
           captchaObj.onClose(() => resolve(null));
@@ -67,7 +71,9 @@ const Login: React.FC = () => {
   return (
     <div>
       <h1>Login Page</h1>
-      <button onClick={handleCaptchaVerification}>Verify Captcha</button>
+      <button onClick={handleCaptchaVerification} disabled={isLoading}>
+        {isLoading ? 'Loading...' : 'Verify Captcha'}
+      </button>
     </div>
   );
 };
